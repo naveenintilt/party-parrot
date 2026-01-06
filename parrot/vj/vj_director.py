@@ -45,7 +45,7 @@ class VJDirector:
 
             # Print the tree structure after initialization
             print("VJ Concert Stage Tree (after initialization):")
-            print(self.concert_stage.print_tree())
+            # print(self.concert_stage.print_tree())
 
     def step(self, frame: Frame, scheme: ColorScheme):
         """Step method called by director - stores latest frame data for rendering"""
@@ -74,7 +74,7 @@ class VJDirector:
             print(
                 f"VJ Concert Stage Tree (after shift #{self.shift_count} to {vj_mode}):"
             )
-            print(self.concert_stage.print_tree())
+            # print(self.concert_stage.print_tree())
 
     def get_concert_stage(self) -> ConcertStage:
         """Get the complete concert stage"""
@@ -94,13 +94,13 @@ class VJDirector:
 
     def _on_vj_mode_change(self, vj_mode: VJMode):
         """Handle VJ mode changes by regenerating the visual tree"""
-        print(f"🎬 VJ Mode changed to: {vj_mode.name}, regenerating visuals...")
+        print(f"[*] VJ Mode changed to: {vj_mode.name}, regenerating visuals...")
         vibe = Vibe(vj_mode)
         self.concert_stage.generate_recursive(vibe, threshold=1.0)
 
         # Print the tree structure after mode change
         print(f"VJ Concert Stage Tree (after mode change to {vj_mode.name}):")
-        print(self.concert_stage.print_tree())
+        # print(self.concert_stage.print_tree())
 
     def cleanup(self):
         """Clean up resources"""

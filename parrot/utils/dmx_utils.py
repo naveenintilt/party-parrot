@@ -42,14 +42,14 @@ def find_entec_port():
 
     # First, try the hardcoded path
     if os.path.exists(usb_path):
-        print(f"Found Entec port at hardcoded path: {usb_path}")
+        print(f"[*] Found Entec port at hardcoded path: {usb_path}")
         return usb_path
 
     # macOS-specific tty fallback
     if sys.platform == "darwin":
         tty_path = usb_path.replace("/dev/cu.", "/dev/tty.")
         if os.path.exists(tty_path):
-            print(f"Found Entec port at tty variant: {tty_path}")
+            print(f"[*] Found Entec port at tty variant: {tty_path}")
             return tty_path
 
     ports = serial.tools.list_ports.comports()
@@ -62,7 +62,7 @@ def find_entec_port():
         product = str(getattr(port, "product", "")).lower()
 
         if "0403" in hwid and "6001" in hwid:
-            print(f"✅ Found FTDI device at {port.device}")
+            print(f"[OK] Found FTDI device at {port.device}")
             return port.device
 
         if any(
@@ -72,7 +72,7 @@ def find_entec_port():
             or keyword in product
             for keyword in ["enttec", "entec", "dmx", "ftdi"]
         ):
-            print(f"✅ Found potential Entec device at {port.device}")
+            print(f"[?] Found potential Entec device at {port.device}")
             return port.device
 
     # OS-specific /dev scanning
@@ -83,6 +83,8 @@ def find_entec_port():
             "/dev/tty.usbserial*",
             "/dev/tty.usbmodem*",
         ]
+    elif sys.platform == "win32":
+        scan_patterns = []  # No glob patterns for Windows, relies on comports()
     else:  # Linux + others
         scan_patterns = [
             "/dev/ttyUSB*",
@@ -93,10 +95,10 @@ def find_entec_port():
     for pattern in scan_patterns:
         for path in glob.glob(pattern):
             if os.path.exists(path):
-                print(f"✅ Found device at {path}")
+                print(f"[OK] Found device at {path}")
                 return path
 
-    print("❌ No Entec DMX controller port found")
+    print("[!] No Entec DMX controller port found")
     return None
 
 
@@ -148,26 +150,26 @@ class SwitchController:
             return False
 
         print(
-            f"🔄 Attempting to reconnect Entec DMX controller for universe {universe.value}..."
+            f"[*] Attempting to reconnect Entec DMX controller for universe {universe.value}..."
         )
         try:
             new_controller = get_entec_controller()
             if isinstance(new_controller, Controller):
                 self.controller_map[universe] = new_controller
                 print(
-                    f"✅ Successfully reconnected Entec DMX controller for universe {universe.value}"
+                    f"[OK] Successfully reconnected Entec DMX controller for universe {universe.value}"
                 )
                 return True
             else:
                 print(
-                    f"⚠️  Entec controller not available, using mock controller for universe {universe.value}"
+                    f"[!] Entec controller not available, using mock controller for universe {universe.value}"
                 )
                 self.controller_map[universe] = new_controller
                 # Remove from Entec universes since we're using mock now
                 self._entec_universes.discard(universe)
                 return False
         except Exception as e:
-            print(f"❌ Failed to reconnect Entec DMX controller: {e}")
+            print(f"[!] Failed to reconnect Entec DMX controller: {e}")
             print(f"   Using mock controller for universe {universe.value}")
             self.controller_map[universe] = MockDmxController()
             # Remove from Entec universes since we're using mock now
@@ -181,7 +183,7 @@ class SwitchController:
                 controller.submit()
             except (SerialException, OSError) as e:
                 # Device may have disconnected - print error and attempt reconnect
-                print(f"⚠️  DMX controller crash for universe {universe.value}: {e}")
+                print(f"[!] DMX controller crash for universe {universe.value}: {e}")
                 # Only attempt reconnection for Entec controllers
                 if universe in self._entec_universes:
                     print(f"   Attempting to reconnect...")
@@ -206,7 +208,7 @@ def get_entec_controller():
     # Try to find the Entec port
     port_path = find_entec_port()
     if port_path is None:
-        print("⚠️  Could not find Entec DMX controller port")
+        print("[!] Could not find Entec DMX controller port")
         print("   Troubleshooting steps:")
         print("   1. Make sure the Entec DMX USB PRO is plugged in")
         print("   2. Check System Information > USB to see if the device appears")

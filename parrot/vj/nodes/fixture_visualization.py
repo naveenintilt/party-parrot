@@ -337,7 +337,16 @@ class FixtureVisualization(GenerativeEffectBase):
                 )
 
                 # Create light entry: position, (r, g, b, intensity)
-                lights.append((bulb_world_pos, (r, g, b, effective_intensity)))
+                lights.append(
+                    (
+                        (
+                            float(bulb_world_pos[0]),
+                            float(bulb_world_pos[1]),
+                            float(bulb_world_pos[2]),
+                        ),
+                        (float(r), float(g), float(b), float(effective_intensity)),
+                    )
+                )
             except Exception:
                 pass  # Skip bulbs that can't be processed
 
@@ -364,8 +373,10 @@ class FixtureVisualization(GenerativeEffectBase):
         out vec3 color;
         
         void main() {
+            // Fix: Use uv to prevent optimization of in_texcoord
+            vec2 dummy = uv * 0.00001; 
             // Just black - fixtures render themselves
-            color = vec3(0.0, 0.0, 0.0);
+            color = vec3(0.0, 0.0, 0.0) + vec3(dummy.x, dummy.y, 0.0);
         }
         """
 

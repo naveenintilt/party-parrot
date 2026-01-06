@@ -40,7 +40,7 @@ class OverlayUI:
             # Reset first render flag when showing overlay
             # to ensure proper IO state initialization
             self._first_render = True
-        print(f"🖥️  Overlay {'shown' if self.visible else 'hidden'}")
+        print(f"[*] Overlay {'shown' if self.visible else 'hidden'}")
 
     def show(self):
         """Show the overlay"""
@@ -92,7 +92,7 @@ class OverlayUI:
         # If user clicked the (x) button, toggle visibility
         if not opened:
             self.visible = False
-            print("🖥️  Overlay hidden")
+            print("[*] Overlay hidden")
 
         if expanded:
             imgui.text("Mode Selection")
@@ -116,7 +116,7 @@ class OverlayUI:
                     mode.name.upper(), self.button_width, self.button_height
                 ):
                     self.state.set_mode(mode)
-                    print(f"🎵 Mode changed to: {mode.name}")
+                    print(f"[*] Mode changed to: {mode.name}")
 
                 if is_selected:
                     imgui.pop_style_color(3)
@@ -135,7 +135,7 @@ class OverlayUI:
             )
             if clicked and new_vj_mode_idx != current_vj_mode_idx:
                 self.state.set_vj_mode(vj_modes[new_vj_mode_idx])
-                print(f"🎬 VJ Mode changed to: {vj_mode_names[new_vj_mode_idx]}")
+                print(f"[*] VJ Mode changed to: {vj_mode_names[new_vj_mode_idx]}")
 
             imgui.spacing()
             imgui.separator()
@@ -150,7 +150,7 @@ class OverlayUI:
             )
             if clicked and new_venue_idx != current_venue_idx:
                 self.state.set_venue(list(venues)[new_venue_idx])
-                print(f"🏛️  Venue changed to: {venue_names[new_venue_idx]}")
+                print(f"[*] Venue changed to: {venue_names[new_venue_idx]}")
 
             imgui.spacing()
 
@@ -163,7 +163,7 @@ class OverlayUI:
             )
             if clicked and new_theme_idx != current_theme_idx:
                 self.state.set_theme(themes[new_theme_idx])
-                print(f"🎨 Color scheme changed to: {theme_names[new_theme_idx]}")
+                print(f"[*] Color scheme changed to: {theme_names[new_theme_idx]}")
 
         imgui.end()
 
@@ -178,7 +178,7 @@ class OverlayUI:
         except Exception as e:
             # Ignore OpenGL errors during shutdown as the context may already be destroyed
             if "GLError" in str(type(e)) or "invalid value" in str(e):
-                print(f"⚠️  Ignoring OpenGL error during imgui shutdown: {e}")
+                print(f"[!] Ignoring OpenGL error during imgui shutdown: {e}")
             else:
                 # Re-raise non-OpenGL errors
                 raise

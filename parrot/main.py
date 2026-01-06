@@ -57,7 +57,7 @@ if __name__ == "__main__":
 
     # Use legacy tkinter GUI if requested, otherwise use modern GL window
     if args.legacy_gui:
-        print("⚠️  Using legacy tkinter GUI (deprecated)")
+        print("[!] Using legacy tkinter GUI (deprecated)")
         from parrot.listeners.mic_to_dmx import MicToDmx
 
         app = MicToDmx(args)

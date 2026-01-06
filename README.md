@@ -23,6 +23,7 @@ https://github.com/user-attachments/assets/3359f668-8472-4afb-a809-ddf2639c94cb
 Get up and running in under 2 minutes:
 
 ```bash
+# MacOS / Linux
 # Install dependencies
 brew install portaudio python-tk@3.12
 poetry install
@@ -30,8 +31,12 @@ poetry install
 # Launch Party Parrot
 just launch
 
-# Or launch fullscreen for performances
-just launch-fullscreen
+# Windows
+# Install Python 3.11+ and Poetry
+poetry install
+
+# Launch Party Parrot
+poetry run python -m parrot.main
 ```
 
 That's it! Party Parrot will start listening to your microphone, analyzing the music, and controlling your DMX fixtures and visuals.

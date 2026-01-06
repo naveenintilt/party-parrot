@@ -880,6 +880,7 @@ prompt_toolkit = ">=3.0.41,<3.1.0"
 pygments = ">=2.11.0"
 stack_data = ">=0.6.0"
 traitlets = ">=5.13.0"
+typing_extensions = {version = ">=4.6", markers = "python_version < \"3.12\""}
 
 [package.extras]
 all = ["ipython[doc,matplotlib,test,test-extra]"]
@@ -1562,7 +1563,10 @@ files = [
 ]
 
 [package.dependencies]
-numpy = {version = ">=1.26.0", markers = "python_version >= \"3.12\""}
+numpy = [
+    {version = ">=1.26.0", markers = "python_version >= \"3.12\""},
+    {version = ">=1.23.5", markers = "python_version == \"3.11\""},
+]
 
 [[package]]
 name = "packaging"
@@ -2536,5 +2540,5 @@ watchdog = ["watchdog (>=2.3)"]
 
 [metadata]
 lock-version = "2.1"
-python-versions = "^3.12"
-content-hash = "d8221af455f79e188c2f42bde92875cda328dcda5a3197a1e0936e2f3eaf66c6"
+python-versions = ">=3.11,<3.14"
+content-hash = "a32179f29ac2432cffd1b88c280829126c6d0b4ad137bf46f4f99a70144b0aac"

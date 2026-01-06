@@ -44,10 +44,10 @@ def run_gl_window_app(args):
     # Override mode if specified via args, otherwise use loaded/default mode
     if getattr(args, "rave", False):
         state.set_mode(Mode.rave)
-        print("🎉 Starting in RAVE mode (from command line)")
+        print("[!] Starting in RAVE mode (from command line)")
     else:
         # Use the mode loaded from state.json or default
-        print(f"🎉 Starting in {state.mode.name.upper()} mode")
+        print(f"[*] Starting in {state.mode.name.upper()} mode")
 
     # Initialize audio analyzer
     audio_analyzer = AudioAnalyzer(signal_states)
@@ -184,7 +184,7 @@ def run_gl_window_app(args):
     # Check for start-with-overlay flag
     if getattr(args, "start_with_overlay", False):
         overlay.show()
-        print("🖥️  Starting with overlay visible")
+        print("[*] Starting with overlay visible")
 
     # Setup native macOS menu bar for settings
     def create_settings_menus():
@@ -192,7 +192,7 @@ def run_gl_window_app(args):
         import sys
 
         if sys.platform != "darwin":
-            print("⚠️  Menu bar only supported on macOS")
+            print("[!] Menu bar only supported on macOS")
             return
 
         try:
@@ -368,10 +368,10 @@ def run_gl_window_app(args):
             pyglet_window._settings_menu_delegate = delegate
 
         except ImportError:
-            print("⚠️  PyObjC not available, menu bar creation skipped")
+            print("[!] PyObjC not available, menu bar creation skipped")
             print("   Settings available via overlay (ENTER key)")
         except Exception as e:
-            print(f"⚠️  Could not create menu bar: {e}")
+            print(f"[!] Could not create menu bar: {e}")
             print(f"   Error details: {type(e).__name__}")
             print("   Settings still available via overlay (ENTER key)")
 
@@ -382,16 +382,16 @@ def run_gl_window_app(args):
     screenshot_time = None
     if screenshot_mode:
         screenshot_time = time.perf_counter() + 0.5
-        print("📸 Screenshot mode: will capture after 0.5s and exit")
+        print("[*] Screenshot mode: will capture after 0.5s and exit")
 
     # Override fixture mode if specified via args, otherwise use loaded/default
     if getattr(args, "fixture_mode", False):
         state.set_show_fixture_mode(True)
-        print("🔧 Starting in fixture mode (from command line)")
+        print("[*] Starting in fixture mode (from command line)")
     elif state.show_fixture_mode:
-        print("🔧 Starting in fixture mode (from saved state)")
+        print("[*] Starting in fixture mode (from saved state)")
     else:
-        print("📺 Starting in VJ mode")
+        print("[*] Starting in VJ mode")
 
     def update_cursor_visibility():
         """Update cursor visibility based on fixture mode"""
@@ -402,7 +402,7 @@ def run_gl_window_app(args):
     def toggle_fixture_mode():
         state.set_show_fixture_mode(not state.show_fixture_mode)
         mode_str = "fixture" if state.show_fixture_mode else "VJ"
-        print(f"🔀 Toggled to {mode_str} mode")
+        print(f"[*] Toggled to {mode_str} mode")
         update_cursor_visibility()
 
     # Setup keyboard handler on the underlying pyglet window
@@ -458,7 +458,7 @@ def run_gl_window_app(args):
         lambda show_fixture: update_cursor_visibility()
     )
 
-    print("⌨️  Keyboard shortcuts:")
+    print("Keyboard shortcuts:")
     print(
         "   SPACE: Regenerate all  |  S: Full shift lighting only  |  O: Full shift VJ only"
     )
@@ -469,8 +469,8 @@ def run_gl_window_app(args):
     print("   E/F: Navigate VJ modes (E=down towards blackout, F=up towards full_rave)")
     print("   LEFT/RIGHT: Navigate VJ modes (alternative)")
     print("   I: Small Blinder  |  G: Big Blinder  |  H: Strobe  |  J: Pulse")
-    print("🖱️  Mouse: Drag to rotate/tilt camera  |  Scroll to zoom (in fixture mode)")
-    print("🖱️  Cursor: Hidden in VJ mode, visible in fixture mode")
+    print("[M] Mouse: Drag to rotate/tilt camera  |  Scroll to zoom (in fixture mode)")
+    print("[C] Cursor: Hidden in VJ mode, visible in fixture mode")
 
     frame_counter = 0
 
@@ -491,7 +491,7 @@ def run_gl_window_app(args):
 
         # Schedule to check for web requests every 50ms
         pyglet.clock.schedule_interval(handle_web_requests, 0.05)
-        print("🌐 Web server integrated into main thread")
+        print("[*] Web server integrated into main thread")
 
     # Track time for delta time calculations
     last_frame_time = time.perf_counter()
@@ -544,7 +544,7 @@ def run_gl_window_app(args):
 
         # Check if window was resized and update renderers
         if (window_width, window_height) != last_window_size:
-            print(f"🖼️  Window resized to {window_width}x{window_height}")
+            print(f"[W] Window resized to {window_width}x{window_height}")
             fixture_renderer.resize(ctx, window_width, window_height)
             last_window_size = (window_width, window_height)
 
@@ -649,7 +649,7 @@ def run_gl_window_app(args):
             w.dispatch_events()
 
     # Cleanup
-    print("\n👋 Shutting down...")
+    print("\n[*] Shutting down...")
     state.save_state()
     audio_analyzer.cleanup()
     vj_director.cleanup()

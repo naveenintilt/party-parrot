@@ -110,7 +110,7 @@ def deploy_hype():
     last_hype_time = time.time()
 
     return jsonify(
-        {"success": True, "message": "Hype deployed! 🚀", "duration": HYPE_DURATION}
+        {"success": True, "message": "Hype deployed! [!]", "duration": HYPE_DURATION}
     )
 
 
@@ -237,8 +237,8 @@ def start_web_server(state, director=None, host="0.0.0.0", port=5000, threaded=T
 
     # Get local IP address
     local_ip = get_local_ip()
-    print(f"\n🌐 Web interface available at: http://{local_ip}:{port}/")
-    print(f"📱 Connect from your mobile device using the above URL\n")
+    print(f"\n[*] Web interface available at: http://{local_ip}:{port}/")
+    print(f"[*] Connect from your mobile device using the above URL\n")
 
     if threaded:
         # Start Flask in a separate thread (legacy mode)

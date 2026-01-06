@@ -129,16 +129,18 @@ class Director:
         result += ":\n"
         
         if not hasattr(self, 'interpreters') or not self.interpreters:
-            result += "└── (no interpreters)\n"
+            result += "`-- (no interpreters)\n"
             return result
         
         for idx, interpreter in enumerate(self.interpreters):
             is_last = idx == len(self.interpreters) - 1
-            connector = "└── " if is_last else "├── "
+            connector = "`-- " if is_last else "|-- "
             
             fixture_str = self.format_fixture_names(interpreter.group)
             # Strip all ANSI escape sequences from interpreter string
             interpreter_str = re.sub(r'\x1b\[[0-9;]*m', '', str(interpreter))
+            # Strip non-ascii characters
+            interpreter_str = re.sub(r'[^\x00-\x7F]+', '', interpreter_str)
             
             result += f"{connector}{Fore.BLUE}{fixture_str}{Style.RESET_ALL} {interpreter_str}\n"
         
